@@ -20,6 +20,7 @@ def _get_all_objects(obj: bpy.types.Object):
 
 
 def load_ent(game_root: Path, ent_path: Path, parent_collection: bpy.types.Collection, game: Game):
+    # print(f"Loading {ent_path}")
     root = ET.parse(ent_path).getroot()
     if game in [Game.DARK_DESCENT]:
         entity_data = EntityFileHPL2.from_xml(root)
@@ -28,10 +29,12 @@ def load_ent(game_root: Path, ent_path: Path, parent_collection: bpy.types.Colle
     else:
         raise NotImplementedError(f"Entity objects from {game} are not supported")
     file_collection = get_or_create_collection(ent_path.stem, parent_collection)
-    mesh_obj, all_objects = load_msh(game_root, entity_data.model_data.mesh.filename.with_suffix(".msh"),
-                                     file_collection, game)
+    mesh_obj, submeshes = load_msh(game_root, entity_data.model_data.mesh.filename.with_suffix(".msh"),
+                                   file_collection, game)
     for submesh in entity_data.model_data.mesh.submeshes:
-        submesh_obj = bpy.data.objects[all_objects[submesh.name]]
+        if submesh.sub_mesh_id >= len(submeshes):
+            continue
+        submesh_obj = bpy.data.objects[submeshes[submesh.sub_mesh_id]]
         extra_matrix = Matrix.LocRotScale(Vector(submesh.position), Euler(submesh.rotation), Vector(submesh.scale))
         submesh_obj.matrix_local = submesh_obj.matrix_local @ extra_matrix
         submesh_obj["extra_matrix"] = extra_matrix

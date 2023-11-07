@@ -166,6 +166,8 @@ class PointLight(Light, XmlAutoDeserialize):
 
 def parse_entity(entity_list: Element):
     entities = []
+    if entity_list is None:
+        return entities
     for value in entity_list:
         tag = value.tag
         if tag == "Entity":

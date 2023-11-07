@@ -7,7 +7,7 @@ from AmnesiaLoader.resource_types.hpl_common.map import EntityCommon, ObjectComm
 
 
 class SubMesh(ObjectCommon):
-    sub_mesh_id: int = XAttr("SubMeshId")
+    sub_mesh_id: int = XAttr("SubMeshID", ["SubMeshId"])
     name: str = XAttr("Name")
 
 

@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import Union
 
-from AmnesiaLoader.resource_types.common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
-from AmnesiaLoader.resource_types.hpl2.map import Light, Area
-from AmnesiaLoader.resource_types.hpl_common.map import EntityCommon, ObjectCommon
+from ..common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
+from ..hpl2.map import Light, Area
+from ..hpl_common.map import EntityCommon, ObjectCommon
 
 
 class SubMesh(ObjectCommon):

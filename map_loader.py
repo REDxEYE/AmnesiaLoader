@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 from mathutils import Vector, Quaternion, Matrix
 
-from main_msh import load_msh
+from .msh_loader import load_msh
 from .common_loaders import load_entity
 from .common_utils import get_or_create_collection, exclude_collection
 from .ent_loader import load_ent

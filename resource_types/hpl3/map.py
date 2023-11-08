@@ -5,14 +5,14 @@ from xml.etree.ElementTree import Element
 
 import numpy as np
 
-from AmnesiaLoader.resource_types.common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
+from ..common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
     parse_user_variables, parse_int_list, parse_np_vec3, parse_np_vec4
-from AmnesiaLoader.resource_types.hpl2.map import File
-from AmnesiaLoader.resource_types.hpl2.map import Light as LightHPL2
-from AmnesiaLoader.resource_types.hpl2.map import PointLight as PointLightHPL2
-from AmnesiaLoader.resource_types.hpl2.map import SpotLight as SpotLightHPL2
-from AmnesiaLoader.resource_types.hpl2.map import BoxLight as BoxLightHPL2
-from AmnesiaLoader.resource_types.hpl_common.map import PlaneCommon, ObjectCommon, DecalCommon, StaticObjectCommon, \
+from ..hpl2.map import File
+from ..hpl2.map import Light as LightHPL2
+from ..hpl2.map import PointLight as PointLightHPL2
+from ..hpl2.map import SpotLight as SpotLightHPL2
+from ..hpl2.map import BoxLight as BoxLightHPL2
+from ..hpl_common.map import PlaneCommon, ObjectCommon, DecalCommon, StaticObjectCommon, \
     EntityCommon
 
 

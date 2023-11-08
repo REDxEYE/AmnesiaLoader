@@ -1,4 +1,4 @@
-from AmnesiaLoader.resource_types.common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool
+from ..common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool
 
 
 class Performance(XmlAutoDeserialize):

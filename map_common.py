@@ -4,12 +4,12 @@ import bpy
 import numpy as np
 from mathutils import Vector, Matrix, Euler
 
-from AmnesiaLoader.common_utils import get_or_create_collection, exclude_collection
-from AmnesiaLoader.mat_loader import generate_material_nodes
-from AmnesiaLoader.material_utils import create_material
-from AmnesiaLoader.resource_types.common import Game
-from AmnesiaLoader.resource_types.hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon
-from main_msh import load_msh
+from .msh_loader import load_msh
+from .common_utils import get_or_create_collection, exclude_collection
+from .mat_loader import generate_material_nodes
+from .material_utils import create_material
+from .resource_types.common import Game
+from .resource_types.hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon
 
 
 def generate_plane(game_root: Path, plane: PlaneCommon, game: Game):

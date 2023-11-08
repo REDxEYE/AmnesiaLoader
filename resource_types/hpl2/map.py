@@ -2,10 +2,10 @@ from pathlib import Path
 from typing import Union
 from xml.etree.ElementTree import Element
 
-from AmnesiaLoader.resource_types.common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
+from ..common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
     parse_user_variables
-from AmnesiaLoader.resource_types.hpl2.common import EditorSession
-from AmnesiaLoader.resource_types.hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon, EntityCommon
+from ..hpl2.common import EditorSession
+from ..hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon, EntityCommon
 
 
 class FileList(XmlAutoDeserialize):

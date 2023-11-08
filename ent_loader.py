@@ -4,12 +4,12 @@ import xml.etree.ElementTree as ET
 import bpy
 from mathutils import Matrix, Vector, Euler
 
-from AmnesiaLoader.common_loaders import load_entity
-from AmnesiaLoader.common_utils import get_or_create_collection
-from AmnesiaLoader.resource_types.common import Game
-from AmnesiaLoader.resource_types.hpl2.ent import EntityFile as EntityFileHPL2
-from AmnesiaLoader.resource_types.hpl3.ent import EntityFile as EntityFileHPL3
-from main_msh import load_msh
+from .msh_loader import load_msh
+from .common_loaders import load_entity
+from .common_utils import get_or_create_collection
+from .resource_types.common import Game
+from .resource_types.hpl2.ent import EntityFile as EntityFileHPL2
+from .resource_types.hpl3.ent import EntityFile as EntityFileHPL3
 
 
 def _get_all_objects(obj: bpy.types.Object):
@@ -22,9 +22,9 @@ def _get_all_objects(obj: bpy.types.Object):
 def load_ent(game_root: Path, ent_path: Path, parent_collection: bpy.types.Collection, game: Game):
     # print(f"Loading {ent_path}")
     root = ET.parse(ent_path).getroot()
-    if game in [Game.DARK_DESCENT]:
+    if game in [Game.DARK_DESCENT, Game.MACHINE_FOR_PIGS, Game.OTHER_HPL2]:
         entity_data = EntityFileHPL2.from_xml(root)
-    elif game in [Game.SOMA, Game.BUNKER]:
+    elif game in [Game.SOMA, Game.BUNKER, Game.OTHER_HPL3]:
         entity_data = EntityFileHPL3.from_xml(root)
     else:
         raise NotImplementedError(f"Entity objects from {game} are not supported")

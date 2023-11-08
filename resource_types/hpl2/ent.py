@@ -1,9 +1,9 @@
 from typing import Any, Union
 
-from AmnesiaLoader.resource_types.common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
-from AmnesiaLoader.resource_types.hpl2.common import EditorSession
-from AmnesiaLoader.resource_types.hpl2.map import parse_entity, Entity, Light, Area
-from AmnesiaLoader.resource_types.hpl_common.ent import ModelDataCommon
+from ..common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
+from ..hpl2.common import EditorSession
+from ..hpl2.map import parse_entity, Entity, Light, Area
+from ..hpl_common.ent import ModelDataCommon
 
 
 class ModelData(ModelDataCommon):

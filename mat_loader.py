@@ -3,11 +3,10 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 import bpy
-from mathutils import Vector
 
-from AmnesiaLoader.common_utils import find_file_v2
-from AmnesiaLoader.resource_types.common import Game
-from AmnesiaLoader.resource_types.hpl2.mat import Mat
+from .common_utils import find_file_v2
+from .resource_types.common import Game
+from .resource_types.hpl2.mat import Mat
 
 try:
     from PIL import Image
@@ -17,7 +16,7 @@ except ImportError:
     pip.main(["install", "Pillow"])
     from PIL import Image
 
-from AmnesiaLoader.material_utils import create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
+from .material_utils import create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
     connect_nodes_group
 
 
@@ -272,7 +271,7 @@ def generate_material_nodes(game_root: Path,
     blend_mode = xml_material.main.blend_mode.lower()
     params = xml_material.variables
 
-    if game == Game.DARK_DESCENT:
+    if game in (Game.DARK_DESCENT, Game.MACHINE_FOR_PIGS, Game.OTHER_HPL2):
         if material_type == "soliddiffuse":
             check_supported_textures(material_path.stem, "soliddiffuse", textures,
                                      "Diffuse",

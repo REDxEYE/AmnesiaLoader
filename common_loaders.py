@@ -3,10 +3,10 @@ from typing import Optional
 import bpy
 from mathutils import Euler, Matrix, Vector
 
-from AmnesiaLoader.common_utils import get_or_create_collection
-from AmnesiaLoader.resource_types.common import Game
-from AmnesiaLoader.resource_types.hpl2.map import PointLight, SpotLight, BoxLight
-from AmnesiaLoader.resource_types.hpl_common.map import EntityCommon
+from .common_utils import get_or_create_collection
+from .resource_types.common import Game
+from .resource_types.hpl2.map import PointLight, SpotLight, BoxLight
+from .resource_types.hpl_common.map import EntityCommon
 
 
 def load_entity(entity, parent_object, entities_collection, game: Game,

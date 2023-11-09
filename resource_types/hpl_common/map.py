@@ -44,11 +44,11 @@ class PlaneCommon(ObjectCommon):
 
 
 class DecalMesh(XmlAutoDeserialize):
-    positions: np.ndarray = XChild("Positions", deserializer=lambda v: parse_np_vec4(v.get("Array")))
-    normals: np.ndarray = XChild("Normals", deserializer=lambda v: parse_np_vec3(v.get("Array")))
-    tangents: np.ndarray = XChild("Tangents", deserializer=lambda v: parse_np_vec4(v.get("Array")))
-    tex_coords: np.ndarray = XChild("TexCoords", deserializer=lambda v: parse_np_vec3(v.get("Array")))
-    indices: np.ndarray = XChild("Indices", deserializer=lambda v: parse_np_ivec3(v.get("Array")))
+    positions: np.ndarray = XChild("Positions", deserializer=lambda v: parse_np_vec4(v.get("Array")) if v is not None else None)
+    normals: np.ndarray = XChild("Normals", deserializer=lambda v: parse_np_vec3(v.get("Array")) if v is not None else None)
+    tangents: np.ndarray = XChild("Tangents", deserializer=lambda v: parse_np_vec4(v.get("Array")) if v is not None else None)
+    tex_coords: np.ndarray = XChild("TexCoords", deserializer=lambda v: parse_np_vec3(v.get("Array")) if v is not None else None)
+    indices: np.ndarray = XChild("Indices", deserializer=lambda v: parse_np_ivec3(v.get("Array")) if v is not None else None)
 
 
 class DecalCommon(ObjectCommon):

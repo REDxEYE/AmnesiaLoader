@@ -29,9 +29,6 @@ def detect_game_root(path: Path):
         if not (path / "maps").exists():
             path = path.parent
             continue
-        if not (path / "models").exists():
-            path = path.parent
-            continue
         if not (path / "static_objects").exists():
             path = path.parent
             continue
@@ -67,7 +64,9 @@ def map_load(operator, filepath: str, files: list[str]):
 
 plugin_info = {
     "name": "HPL2/3 importer",
+    "id": "AmnesiaLoader",
     "description": "HPL2/3 addon, adding support to import Amnesia game assets and other game on this engine",
+    "version": (0, 1, 0),
     "loaders": [
         {
             "name": "Load .msh file",
@@ -87,9 +86,9 @@ plugin_info = {
             ]
         },
         {
-            "name": "Load .map file",
+            "name": "Load .map/.hpm file",
             "id": "hpl_map",
-            "exts": ("*.map",),
+            "exts": ("*.map", "*.hpm"),
             "init_fn": map_init,
             "import_fn": map_load,
             "properties": [

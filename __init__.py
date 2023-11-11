@@ -50,15 +50,27 @@ def map_load(operator, filepath: str, files: list[str]):
     game_root = detect_game_root(Path(filepath))
     build_cache(game_root, ("*.dds", "*.msh", "*.mat", "*.tga", "*.ent"))
     base_path = Path(filepath).parent
-    loader = load_hpl3_map if Game(operator.game) in (Game.SOMA, Game.BUNKER, Game.OTHER_HPL3) else load_hpl2_map
-
     root = bpy.data.objects.new("ROOT", None)
     root.matrix_world = Euler((math.radians(90), 0, 0), "XYZ").to_matrix().to_4x4()
     bpy.context.scene.collection.objects.link(root)
 
     for file in files:
         filepath = base_path / file
-        loader(game_root, filepath, root, Game(operator.game))
+        load_hpl2_map(game_root, filepath, root, Game(operator.game))
+    return {"FINISHED"}
+
+
+def hpm_load(operator, filepath: str, files: list[str]):
+    game_root = detect_game_root(Path(filepath))
+    build_cache(game_root, ("*.dds", "*.msh", "*.mat", "*.tga", "*.ent"))
+    base_path = Path(filepath).parent
+    root = bpy.data.objects.new("ROOT", None)
+    root.matrix_world = Euler((math.radians(90), 0, 0), "XYZ").to_matrix().to_4x4()
+    bpy.context.scene.collection.objects.link(root)
+
+    for file in files:
+        filepath = base_path / file
+        load_hpl3_map(game_root, filepath, root, Game(operator.game))
     return {"FINISHED"}
 
 
@@ -86,9 +98,9 @@ plugin_info = {
             ]
         },
         {
-            "name": "Load .map/.hpm file",
+            "name": "Load .map file",
             "id": "hpl_map",
-            "exts": ("*.map", "*.hpm"),
+            "exts": ("*.map",),
             "init_fn": map_init,
             "import_fn": map_load,
             "properties": [
@@ -97,7 +109,26 @@ plugin_info = {
                     "prop_name": "game",
                     "bl_type": EnumProperty,
                     "kwargs": {
-                        "items": [(item.value, item.value, "", i) for i, item in enumerate(Game)]
+                        "items": [(item.value, item.value, "", i) for i, item in enumerate(Game)],
+                        "default": Game.OTHER_HPL2.value
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Load .hpm file",
+            "id": "hpl_hpm",
+            "exts": ("*.hpm",),
+            "init_fn": map_init,
+            "import_fn": hpm_load,
+            "properties": [
+                {
+                    "name": "Game",
+                    "prop_name": "game",
+                    "bl_type": EnumProperty,
+                    "kwargs": {
+                        "items": [(item.value, item.value, "", i) for i, item in enumerate(Game)],
+                        "default": Game.OTHER_HPL3.value,
                     }
                 }
             ]

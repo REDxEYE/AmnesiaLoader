@@ -1,4 +1,3 @@
-from io import BytesIO
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -7,14 +6,7 @@ import bpy
 from .common_utils import find_file_v2
 from .resource_types.common import Game
 from .resource_types.hpl2.mat import Mat
-
-try:
-    from PIL import Image
-except ImportError:
-    import pip
-
-    pip.main(["install", "Pillow"])
-    from PIL import Image
+from .texture_decoder import Texture
 
 from .material_utils import create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
     connect_nodes_group
@@ -28,26 +20,20 @@ def load_texture(game_root: Path, material_path: Path, texture_path: Path):
 
     resolved_real_path = find_file_v2(game_root, texture_path)
     if resolved_real_path is not None:
-        # print(f"Loading {real_path}")
-        im = Image.open(resolved_real_path)
-        channels = len(im.mode)
-        image = bpy.data.images.load(str(resolved_real_path))
-        if image.channels == 0:
-            print(f"Found unsupported texture: {resolved_real_path}: {getattr(im, 'pixel_format', 'UNKNOWN')}")
-            bpy.data.images.remove(image)
-            image = bpy.data.images.new(texture_path.stem + ".tga", width=im.width, height=im.height)
-            im = Image.open(resolved_real_path)
-            data = BytesIO()
-            im.save(data, "tga")
-            size = data.tell()
-            data.seek(0)
-            image.pack(data=data.read(), data_len=size)
-            image.use_fake_user = True
-            image.source = 'FILE'
-            if hasattr(im, "pixel_format"):
-                image["pf"] = im.pixel_format
+        print(f"Loading {resolved_real_path}")
 
-        image["channels"] = channels
+        if resolved_real_path.with_suffix(".tga").exists():
+            image = bpy.data.images.load(str(resolved_real_path.with_suffix(".tga")))
+        else:
+            image = bpy.data.images.load(str(resolved_real_path))
+            if image.channels == 0:
+                bpy.data.images.remove(image)
+                texture = Texture.from_dds(resolved_real_path)
+                print(f"Found unsupported texture: {resolved_real_path}: {texture.pixel_format.name}")
+                texture.write_tga(resolved_real_path.with_suffix(".tga"))
+                image = bpy.data.images.load(str(resolved_real_path.with_suffix(".tga")))
+
+        image["channels"] = image.channels
         image.alpha_mode = 'CHANNEL_PACKED'
         return image
     else:

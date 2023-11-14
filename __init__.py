@@ -4,7 +4,8 @@ from pathlib import Path
 import bpy
 from mathutils import Euler
 
-from .common_utils import get_or_create_collection, build_cache
+from .common_utils import build_cache
+from ...common_api.collections import get_or_create_collection
 from .resource_types.common import Game
 from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
                        FloatProperty, StringProperty)

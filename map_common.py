@@ -5,7 +5,7 @@ import numpy as np
 from mathutils import Vector, Matrix, Euler
 
 from .msh_loader import load_msh
-from .common_utils import get_or_create_collection, exclude_collection
+from ...common_api import get_or_create_collection, exclude_collection
 from .mat_loader import generate_material_nodes
 from .material_utils import create_material
 from .resource_types.common import Game

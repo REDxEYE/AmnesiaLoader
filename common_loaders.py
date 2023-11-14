@@ -3,7 +3,7 @@ from typing import Optional
 import bpy
 from mathutils import Euler, Matrix, Vector
 
-from .common_utils import get_or_create_collection
+from ...common_api import get_or_create_collection
 from .resource_types.common import Game
 from .resource_types.hpl2.map import PointLight, SpotLight, BoxLight
 from .resource_types.hpl_common.map import EntityCommon

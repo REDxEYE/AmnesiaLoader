@@ -5,7 +5,7 @@ from mathutils import Vector, Quaternion, Matrix
 
 from .msh_loader import load_msh
 from .common_loaders import load_entity
-from .common_utils import get_or_create_collection, exclude_collection
+from ...common_api import get_or_create_collection, exclude_collection
 from .ent_loader import load_ent
 from .map_common import generate_plane, load_decal, load_static_objects
 from .resource_types.common import Game

@@ -6,10 +6,9 @@ import bpy
 from .common_utils import find_file_v2
 from .resource_types.common import Game
 from .resource_types.hpl2.mat import Mat
-from ...common_api import Texture
-
-from .material_utils import create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
+from ...common_api import Texture,create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
     connect_nodes_group
+
 
 
 def load_texture(game_root: Path, material_path: Path, texture_path: Path):

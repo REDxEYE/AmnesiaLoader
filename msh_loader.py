@@ -5,7 +5,7 @@ import numpy as np
 from mathutils import Vector, Matrix
 
 from .common_utils import find_file_v2
-from ...common_api import create_material
+from ...common_api import create_material, is_blender_4_1
 from .mat_loader import generate_material_nodes
 from .resource_types.common import Game
 from .resource_types.msh import Msh, Skeleton
@@ -76,7 +76,8 @@ def load_msh(game_root: Path, mesh_path: Path, parent_collection: bpy.types.Coll
         mesh_data.loops.foreach_get('vertex_index', vertex_indices)
 
         mesh_data.polygons.foreach_set("use_smooth", np.ones(len(mesh_data.polygons), np.uint32))
-        mesh_data.use_auto_smooth = True
+        if not is_blender_4_1():
+            mesh_data.use_auto_smooth = True
         if submesh.normal_data is not None:
             normals = submesh.normal_data.copy()
             mesh_data.normals_split_custom_set_from_vertices(normals)

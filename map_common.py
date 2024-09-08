@@ -5,7 +5,7 @@ import numpy as np
 from mathutils import Vector, Matrix, Euler
 
 from .msh_loader import load_msh
-from ...common_api import create_material, get_or_create_collection, exclude_collection
+from ...common_api import create_material, get_or_create_collection, exclude_collection, is_blender_4_1
 from .mat_loader import generate_material_nodes
 from .resource_types.common import Game
 from .resource_types.hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon
@@ -59,7 +59,8 @@ def load_decal(collection, decal: DecalCommon, decal_material_list: list[File], 
     vertex_indices = np.zeros((len(mesh_data.loops, )), dtype=np.uint32)
     mesh_data.loops.foreach_get('vertex_index', vertex_indices)
     mesh_data.polygons.foreach_set("use_smooth", np.ones(len(mesh_data.polygons), np.uint32))
-    mesh_data.use_auto_smooth = True
+    if not is_blender_4_1():
+        mesh_data.use_auto_smooth = True
     if decal.mesh.normals is not None:
         normals = decal.mesh.normals.copy()
         mesh_data.normals_split_custom_set_from_vertices(normals)

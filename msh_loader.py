@@ -4,8 +4,9 @@ import bpy
 import numpy as np
 from mathutils import Vector, Matrix
 
+from UniLoader.bpy_helper import is_blender_4_1
 from .common_utils import find_file_v2
-from ...common_api import create_material, is_blender_4_1
+from ...common_api import create_material
 from .mat_loader import generate_material_nodes
 from .resource_types.common import Game
 from .resource_types.msh import Msh, Skeleton

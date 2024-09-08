@@ -193,14 +193,31 @@ class XmlAutoDeserialize:
                 elif xattr_descriptor.deserializer is not None:
                     kwargs[attr_name] = xattr_descriptor.deserializer(value)
                 else:
-                    kwargs[attr_name] = attr_type(value)
+                    mapping = {
+                        '1#INF': float('inf'),
+                        '1.#INF': float('inf'),
+                        '-1#INF': float('-inf'),
+                        '-1.#INF': float('-inf'),
+                        '1#SNAN': float('nan'),  # Python doesn't differentiate between signaling and quiet NaNs
+                        '1.#SNAN': float('nan'),
+                        '-1#SNAN': float('nan'),
+                        '-1.#SNAN': float('nan'),
+                        '1#QNAN': float('nan'),
+                        '1.#QNAN': float('nan'),
+                        '-1#QNAN': float('nan'),
+                        '-1.#QNAN': float('nan'),
+                        '1#IND': float('nan'),  # Indefinite NaN maps to NaN in Python
+                        '1.#IND': float('nan'),
+                        '-1#IND': float('nan'),
+                        '-1.#IND': float('nan')
+                    }
+                    if value in mapping:
+                        kwargs[attr_name] = mapping[value]
+                    else:
+                        kwargs[attr_name] = attr_type(value)
                 continue
 
-        def make_repr(fields, maxlevel=5):
-            repr_instance = reprlib.Repr()
-            repr_instance.maxlevel = maxlevel
-            arepr = repr_instance.repr
-
+        def make_repr(fields):
             def __repr__(self):
                 field_strs = ', '.join(f'{field}={repr(getattr(self, field))}' for field in fields)
                 return f'{self.__class__.__name__}({field_strs})'

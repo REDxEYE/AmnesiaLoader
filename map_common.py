@@ -4,8 +4,9 @@ import bpy
 import numpy as np
 from mathutils import Vector, Matrix, Euler
 
+from UniLoader.bpy_helper import is_blender_4_1
 from .msh_loader import load_msh
-from ...common_api import create_material, get_or_create_collection, exclude_collection, is_blender_4_1
+from ...common_api import create_material, get_or_create_collection, exclude_collection
 from .mat_loader import generate_material_nodes
 from .resource_types.common import Game
 from .resource_types.hpl_common.map import PlaneCommon, DecalCommon, File, StaticObjectCommon

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Iterable
+from typing import Iterable
 
 
 def pop_path_back(path: Path):
@@ -18,19 +18,7 @@ def build_cache(game_root: Path, file_masks: Iterable[str]):
         for file in game_root.rglob(mask):
             _FILE_CACHE[file.name.lower()] = file
             _FILE_CACHE[str(file.relative_to(game_root)).lower()] = file
-    print(f"Indexed {len(_FILE_CACHE)//2} files")
-
-
-def find_file(game_root: Path, file_name: str) -> Optional[Path]:
-    file_name = file_name.lower()
-    if file_name in _FILE_CACHE:
-        return _FILE_CACHE[file_name]
-    if file_name in ["blank2.mat", "nixiebox_height.tga"]:
-        return None
-    # assert False, file_name
-    real_path = next(game_root.rglob(file_name), None)
-    _FILE_CACHE[file_name] = real_path
-    return real_path
+    print(f"Indexed {len(_FILE_CACHE) // 2} files")
 
 
 def find_file_v2(game_root: Path, file_path: Path):
@@ -59,5 +47,3 @@ def glob_backwalk_file_resolver(current_path, file_to_find):
             return tmp
 
         second_part = pop_path_back(second_part)
-
-

@@ -1,3 +1,4 @@
+import math
 from typing import Optional
 
 import bpy
@@ -38,6 +39,8 @@ def load_entity(entity, parent_object, entities_collection, game: Game,
         light.color = entity.diffuse_color[:3]
         light.energy = 100 * entity.radius
         light.spot_size = entity.fov
+        light.spot_blend = 1 - entity.aspect
+        light.shadow_soft_size = entity.radius / 100
         obj: bpy.types.Object = bpy.data.objects.new(entity.name, light)
         lights_collection.objects.link(obj)
         obj["entity_data"] = {}
@@ -57,6 +60,8 @@ def load_entity(entity, parent_object, entities_collection, game: Game,
         light.cycles.use_multiple_importance_sampling = True
         light.color = entity.diffuse_color[:3]
         light.energy = 100 * entity.radius * Vector(entity.size).magnitude
+        light.spread = math.pi * entity.radius / 100
+
         obj: bpy.types.Object = bpy.data.objects.new(entity.name, light)
         lights_collection.objects.link(obj)
         obj["entity_data"] = {}
@@ -76,6 +81,8 @@ def load_entity(entity, parent_object, entities_collection, game: Game,
         light.cycles.use_multiple_importance_sampling = True
         light.color = entity.diffuse_color[:3]
         light.energy = 100 * entity.radius
+        light.shadow_soft_size = entity.radius / 100
+
         obj: bpy.types.Object = bpy.data.objects.new(entity.name, light)
         lights_collection.objects.link(obj)
         obj["entity_data"] = {}

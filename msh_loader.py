@@ -5,6 +5,7 @@ import numpy as np
 from mathutils import Vector, Matrix
 
 from UniLoader.bpy_helper import is_blender_4_1
+from UniLoader.common_api import FileBuffer
 from .common_utils import find_file_v2
 from ...common_api import create_material
 from .mat_loader import generate_material_nodes
@@ -47,8 +48,8 @@ def load_msh(game_root: Path, mesh_path: Path, parent_collection: bpy.types.Coll
         resolved_mesh_path = find_file_v2(game_root, mesh_path)
     if resolved_mesh_path is None:
         print(f"Failed to find file {mesh_path} in {game_root}")
-    with resolved_mesh_path.open("rb") as f:
-        mesh = Msh.from_file(f)
+    with FileBuffer(resolved_mesh_path) as f:
+        mesh = Msh.from_buffer(f)
     parent = bpy.data.objects.new(mesh_path.stem, None)
     if mesh.skeleton:
         skeleton = _create_skeleton(mesh_path.stem, mesh.skeleton, game)

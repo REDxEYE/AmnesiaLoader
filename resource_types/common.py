@@ -31,48 +31,6 @@ class Vector4(Tuple[float, float, float, float]):
 Matrix = Tuple[Vector4, Vector4, Vector4, Vector3]
 
 
-def read_fmt(fmt: str, file: BinaryIO):
-    return struct.unpack(fmt, file.read(struct.calcsize(fmt)))
-
-
-def read_u32(file: BinaryIO):
-    return struct.unpack("I", file.read(4))[0]
-
-
-def read_i32(file: BinaryIO):
-    return struct.unpack("i", file.read(4))[0]
-
-
-def read_u16(file: BinaryIO):
-    return struct.unpack("H", file.read(2))[0]
-
-
-def read_i16(file: BinaryIO):
-    return struct.unpack("h", file.read(2))[0]
-
-
-def read_u8(file: BinaryIO):
-    return struct.unpack("B", file.read(1))[0]
-
-
-def read_i8(file: BinaryIO):
-    return struct.unpack("b", file.read(1))[0]
-
-
-def read_f32(file: BinaryIO):
-    return struct.unpack("f", file.read(4))[0]
-
-
-def read_string(file: BinaryIO):
-    buffer = b""
-    while True:
-        c = file.read(1)
-        if c == b"\x00" or not c:
-            break
-        buffer += c
-    return buffer.decode("utf8")
-
-
 @dataclass(slots=True)
 class XCommon:
     alias: str | None
@@ -285,11 +243,6 @@ def parse_user_variables(value: Element):
 
 __all__ = [
     "Vector2", "Vector3", "Vector4", "Matrix",
-    "read_fmt",
-    "read_u32", "read_i32",
-    "read_u16", "read_i16",
-    "read_u8", "read_i8",
-    "read_f32", "read_string",
     "XmlAutoDeserialize", "XChild", "XAttr",
     "Game",
     "parse_bool", "parse_float_list", "parse_np_ivec3",

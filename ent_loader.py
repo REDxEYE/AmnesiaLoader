@@ -21,7 +21,10 @@ def _get_all_objects(obj: bpy.types.Object):
 
 def load_ent(game_root: Path, ent_path: Path, parent_collection: bpy.types.Collection, game: Game):
     # print(f"Loading {ent_path}")
-    root = ET.parse(ent_path).getroot()
+    try:
+        root = ET.parse(ent_path).getroot()
+    except ET.ParseError as ex:
+        raise RuntimeError(f"Failed to parse {ent_path} due to: {ex}") from ex
     if game.value in [Game.DARK_DESCENT.value, Game.MACHINE_FOR_PIGS.value, Game.OTHER_HPL2.value]:
         entity_data = EntityFileHPL2.from_xml(root)
     elif game.value in [Game.SOMA.value, Game.BUNKER.value, Game.OTHER_HPL3.value]:
@@ -31,7 +34,7 @@ def load_ent(game_root: Path, ent_path: Path, parent_collection: bpy.types.Colle
     file_collection = get_or_create_collection(ent_path.stem, parent_collection)
     mesh_obj, submeshes = load_msh(game_root, entity_data.model_data.mesh.filename.with_suffix(".msh"),
                                    file_collection, game)
-    for i,submesh in enumerate(entity_data.model_data.mesh.submeshes):
+    for i, submesh in enumerate(entity_data.model_data.mesh.submeshes):
         if submesh.sub_mesh_id is None:
             submesh.sub_mesh_id = i
         if submesh.sub_mesh_id >= len(submeshes):

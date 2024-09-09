@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from enum import IntEnum
 from pathlib import Path
-from typing import List, Optional, BinaryIO, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 
+from UniLoader.common_api.buffer_api import Buffer
 from .common import *
 
 
@@ -16,12 +17,12 @@ class Bone:
     children: List['Bone'] = field(default_factory=list)
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        name = read_string(file)
-        unk_name = read_string(file)
-        matrix = (read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file))
-        child_count = read_u32(file)
-        children = [Bone.from_file(file) for _ in range(child_count)]
+    def from_buffer(cls, buffer: Buffer):
+        name = buffer.read_ascii_string()
+        unk_name = buffer.read_ascii_string()
+        matrix = (buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"))
+        child_count = buffer.read_uint32()
+        children = [Bone.from_buffer(buffer) for _ in range(child_count)]
         return cls(name, unk_name, matrix, children)
 
     def flatten(self) -> List[Tuple['Bone', str]]:
@@ -37,9 +38,9 @@ class Skeleton:
     bones: List[Bone] = field(default_factory=list)
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        bone_count = read_u32(file)
-        return cls([Bone.from_file(file) for _ in range(bone_count)])
+    def from_buffer(cls, buffer: Buffer):
+        bone_count = buffer.read_uint32()
+        return cls([Bone.from_buffer(buffer) for _ in range(bone_count)])
 
     def flatten_bones(self):
         bones = []
@@ -58,12 +59,12 @@ class Node:
     children: List['Node'] = field(default_factory=list)
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        name = read_string(file)
-        matrix = (read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file))
-        unk_0 = read_u32(file)
-        child_count = read_u32(file)
-        children = [Node.from_file(file) for _ in range(child_count)]
+    def from_buffer(cls, buffer: Buffer):
+        name = buffer.read_ascii_string()
+        matrix = (buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"))
+        unk_0 = buffer.read_uint32()
+        child_count = buffer.read_uint32()
+        children = [Node.from_buffer(buffer) for _ in range(child_count)]
         return cls(name, matrix, unk_0, children)
 
     def flatten(self) -> List[Tuple[str, Optional[str]]]:
@@ -82,11 +83,11 @@ class Collider:
     unk_1: int
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        unk_0 = read_u16(file)
-        matrix = (read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file))
-        unk_vec = read_fmt("3f", file)
-        unk_1 = read_u8(file)
+    def from_buffer(cls, buffer: Buffer):
+        unk_0 = buffer.read_uint16()
+        matrix = (buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"))
+        unk_vec = buffer.read_fmt("3f")
+        unk_1 = buffer.read_uint8()
 
         return cls(unk_0, matrix, unk_vec, unk_1)
 
@@ -131,8 +132,8 @@ class VtxBufferDesc:
     component_count: int
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        usage, fmt, unk_2, component_count = read_fmt("2H2I", file)
+    def from_buffer(cls, buffer: Buffer):
+        usage, fmt, unk_2, component_count = buffer.read_fmt("2H2I")
         return cls(VertexBufferElement(usage), VertexBufferElementFormat(fmt), unk_2, component_count)
 
 
@@ -151,41 +152,41 @@ class SubMesh:
     lods: List[Tuple[float, np.ndarray]] = field(default_factory=list)
 
     @classmethod
-    def from_file(cls, file: BinaryIO, version: int = 8):
-        name = read_string(file)
-        material = Path(read_string(file))
-        matrix = (read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file), read_fmt("4f", file))
-        unk_vec = read_fmt("3f", file)
-        unk = read_u8(file)
+    def from_file(cls, buffer: Buffer, version: int = 8):
+        name = buffer.read_ascii_string()
+        material = Path(buffer.read_ascii_string())
+        matrix = (buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"), buffer.read_fmt("4f"))
+        unk_vec = buffer.read_fmt("3f")
+        unk = buffer.read_uint8()
 
-        collider_count = read_u32(file)
-        colliders = [Collider.from_file(file) for _ in range(collider_count)]
+        collider_count = buffer.read_uint32()
+        colliders = [Collider.from_buffer(buffer) for _ in range(collider_count)]
 
-        vertex_bone_pairs_count = read_u32(file)
-        weights = np.frombuffer(file.read(vertex_bone_pairs_count * VertexBonePair.itemsize), dtype=VertexBonePair)
+        vertex_bone_pairs_count = buffer.read_uint32()
+        weights = np.frombuffer(buffer.read(vertex_bone_pairs_count * VertexBonePair.itemsize), dtype=VertexBonePair)
 
-        vertex_count_count = read_u32(file)
-        vertex_buffer_count = read_u32(file)
+        vertex_count_count = buffer.read_uint32()
+        vertex_buffer_count = buffer.read_uint32()
 
         descs = []
         buffers = []
 
         for _ in range(vertex_buffer_count):
-            desc = VtxBufferDesc.from_file(file)
+            desc = VtxBufferDesc.from_buffer(buffer)
             descs.append(desc)
-            buffers.append(file.read(vertex_count_count * 4 * desc.component_count))
+            buffers.append(buffer.read(vertex_count_count * 4 * desc.component_count))
 
         lods = []
         if version == 8:
-            lod_count = read_u32(file)
+            lod_count = buffer.read_uint32()
             for _ in range(lod_count):
-                index_count = read_u32(file)
-                switch_distance = read_f32(file)
-                indices = np.frombuffer(file.read(index_count * 4), np.uint32).reshape((-1, 3))
+                index_count = buffer.read_uint32()
+                switch_distance = buffer.read_float()
+                indices = np.frombuffer(buffer.read(index_count * 4), np.uint32).reshape((-1, 3))
                 lods.append((switch_distance, indices))
         else:
-            index_count = read_u32(file)
-            indices = np.frombuffer(file.read(index_count * 4), np.uint32).reshape((-1, 3))
+            index_count = buffer.read_uint32()
+            indices = np.frombuffer(buffer.read(index_count * 4), np.uint32).reshape((-1, 3))
             lods.append((0.0, indices))
         return cls(name, material, matrix, unk_vec, unk, colliders, weights, descs, buffers, lods)
 
@@ -250,29 +251,29 @@ class Msh:
     # animations: List[Animation] = field(default_factory=list)
 
     @classmethod
-    def from_file(cls, file: BinaryIO):
-        magic = read_u32(file)
+    def from_buffer(cls, buffer: Buffer):
+        magic = buffer.read_uint32()
         assert magic == 0x76034569, "Invalid magic"
-        version = read_u32(file)
+        version = buffer.read_uint32()
         assert version in (7, 8), "Unsupported version"
         flags = 0
         if version == 8:
-            flags = read_u32(file)
-        submesh_count = read_u32(file)
-        unused = read_u32(file)
-        has_skeleton = read_u8(file)
+            flags = buffer.read_uint32()
+        submesh_count = buffer.read_uint32()
+        unused = buffer.read_uint32()
+        has_skeleton = buffer.read_uint8()
 
         skeleton = None
         if has_skeleton:
-            skeleton = Skeleton.from_file(file)
+            skeleton = Skeleton.from_buffer(buffer)
 
-        nodes_count = read_u32(file)
-        nodes = [Node.from_file(file) for _ in range(nodes_count)]
-        submeshes = [SubMesh.from_file(file, version) for _ in range(submesh_count)]
-        animation_count = read_u32(file)
+        nodes_count = buffer.read_uint32()
+        nodes = [Node.from_buffer(buffer) for _ in range(nodes_count)]
+        submeshes = [SubMesh.from_file(buffer, version) for _ in range(submesh_count)]
+        animation_count = buffer.read_uint32()
         if animation_count > 0:
-            read_string(file)
-            duration, tracks, bboxes = read_fmt("f2I", file)
+            buffer.read_ascii_string()
+            duration, tracks, bboxes = buffer.read_fmt("f2I")
             if bboxes > 0:
                 print("AAAAAA")
         return cls(version, flags, unused, skeleton, nodes, submeshes)

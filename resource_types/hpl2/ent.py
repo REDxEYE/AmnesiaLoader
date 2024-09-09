@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-from ..common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
+from ..common import XmlAutoDeserialize, XChild, parse_user_variables
 from ..hpl2.common import EditorSession
 from ..hpl2.map import parse_entity, Entity, Light, Area
 from ..hpl_common.ent import ModelDataCommon

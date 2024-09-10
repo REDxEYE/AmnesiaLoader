@@ -197,11 +197,43 @@ class Game(Enum):
     OTHER_HPL3 = "Other HPL3"
 
 
+replace_list = [
+    '1#INF',
+    '1.#INF',
+    '-1#INF',
+    '-1.#INF',
+    '1#SNAN',
+    '1.#SNAN',
+    '-1#SNAN',
+    '-1.#SNAN',
+    '1#QNAN',
+    '1.#QNAN',
+    '-1#QNAN',
+    '-1.#QNAN',
+    '1#IND',
+    '1.#IND',
+    '-1#IND',
+    '-1.#IND',
+    '-1.#IO',
+    '1.#IO',
+    '-1#IO',
+    '1#IO',
+]
+
+
+def _replace_invalid(value: str):
+    for inv in replace_list:
+        value = value.replace(inv, '0')
+    return value
+
+
 def parse_float_list(value: str):
+    value = _replace_invalid(value)
     return [float(v) for v in value.strip(" ").rstrip(" ").split(" ")]
 
 
 def parse_int_list(value: str):
+    value = _replace_invalid(value)
     return [int(v) for v in value.strip(" ").rstrip(" ").split(" ")]
 
 
@@ -214,21 +246,22 @@ def parse_bool(value: str):
 
 
 def parse_np_vec3(value: str):
-    return np.fromstring(value.strip(), np.float32, sep=" ").reshape((-1, 3))
+    return np.fromstring(_replace_invalid(value), np.float32, sep=" ").reshape((-1, 3))
 
 
 def parse_np_vec4(value: str):
-    return np.fromstring(value.strip(), np.float32, sep=" ").reshape((-1, 4))
+    return np.fromstring(_replace_invalid(value), np.float32, sep=" ").reshape((-1, 4))
 
 
 def parse_np_ivec3(value: str):
-    return np.fromstring(value.strip(), np.uint32, sep=" ").reshape((-1, 3))
+    return np.fromstring(_replace_invalid(value), np.uint32, sep=" ").reshape((-1, 3))
 
 
 def parse_user_variables(value: Element):
     data = {}
     for var in value:
         value_ = var.attrib["Value"]
+        value_ = _replace_invalid(value_)
         if value_ in ["false", "true"]:
             value_ = value_ == "true"
         elif value_ == "None":

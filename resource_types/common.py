@@ -214,15 +214,15 @@ def parse_bool(value: str):
 
 
 def parse_np_vec3(value: str):
-    return np.fromstring(value, np.float32, sep=" ").reshape((-1, 3))
+    return np.fromstring(value.strip(), np.float32, sep=" ").reshape((-1, 3))
 
 
 def parse_np_vec4(value: str):
-    return np.fromstring(value, np.float32, sep=" ").reshape((-1, 4))
+    return np.fromstring(value.strip(), np.float32, sep=" ").reshape((-1, 4))
 
 
 def parse_np_ivec3(value: str):
-    return np.fromstring(value, np.uint32, sep=" ").reshape((-1, 3))
+    return np.fromstring(value.strip(), np.uint32, sep=" ").reshape((-1, 3))
 
 
 def parse_user_variables(value: Element):

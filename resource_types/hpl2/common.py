@@ -1,4 +1,4 @@
-from ..common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool
 
 
 class Performance(XmlAutoDeserialize):

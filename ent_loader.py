@@ -7,7 +7,7 @@ from mathutils import Matrix, Vector, Euler
 from .msh_loader import load_msh
 from .common_loaders import load_entity
 from ...common_api import get_or_create_collection
-from .resource_types.common import Game
+from .game import Game
 from .resource_types.hpl2.ent import EntityFile as EntityFileHPL2
 from .resource_types.hpl3.ent import EntityFile as EntityFileHPL3
 

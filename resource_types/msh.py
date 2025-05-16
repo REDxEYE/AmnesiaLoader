@@ -6,7 +6,7 @@ from typing import List, Optional, Tuple
 import numpy as np
 
 from UniLoader.common_api.buffer_api import Buffer
-from .common import *
+from UniLoader.common_api.xml_parsing import *
 
 
 @dataclass(slots=True)

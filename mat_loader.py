@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import bpy
 
 from .common_utils import find_file_v2
-from .resource_types.common import Game
+from .game import Game
 from .resource_types.hpl2.mat import Mat
 from ...common_api import Texture,create_node, Nodes, connect_nodes, clear_nodes, create_texture_node, \
     connect_nodes_group

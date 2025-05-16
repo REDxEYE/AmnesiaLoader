@@ -9,7 +9,7 @@ from UniLoader.common_api import FileBuffer
 from .common_utils import find_file_v2
 from ...common_api import create_material
 from .mat_loader import generate_material_nodes
-from .resource_types.common import Game
+from .game import Game
 from .resource_types.msh import Msh, Skeleton
 
 

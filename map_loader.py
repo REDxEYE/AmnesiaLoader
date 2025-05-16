@@ -8,7 +8,7 @@ from .common_loaders import load_entity
 from ...common_api import get_or_create_collection, exclude_collection
 from .ent_loader import load_ent
 from .map_common import generate_plane, load_decal, load_static_objects
-from .resource_types.common import Game
+from .game import Game
 from .resource_types.hpl2.map import HPL2Map
 from .resource_types.hpl3.map import HPLMapTrackDecal, HPLMapTrackPrimitive, HPLMapTrackEntity, HPLMapTrackStaticObject, \
     HPLMapTrackDetailMeshes

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 
-from ..common import XmlAutoDeserialize, XAttr, parse_bool, parse_float_list, XChild, \
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XAttr, parse_bool, parse_float_list, XChild, \
     parse_np_vec4, parse_np_vec3, parse_np_ivec3, parse_user_variables
 
 

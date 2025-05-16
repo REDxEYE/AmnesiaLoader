@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Union
 from xml.etree.ElementTree import Element
 
-from ..common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_float_list
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_float_list
 
 
 class Main(XmlAutoDeserialize):

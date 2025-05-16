@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-from ..common import XmlAutoDeserialize, XChild, parse_user_variables
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XChild, parse_user_variables
 from ..hpl3.map import Entity, parse_entity
 from ..hpl2.map import Light, Area
 from ..hpl_common.ent import ModelDataCommon

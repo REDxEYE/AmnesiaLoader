@@ -5,7 +5,7 @@ from xml.etree.ElementTree import Element
 
 import numpy as np
 
-from ..common import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XChild, XAttr, parse_float_list, parse_bool, \
     parse_user_variables, parse_int_list, parse_np_vec3, parse_np_vec4
 from ..hpl2.map import File
 from ..hpl2.map import Light as LightHPL2

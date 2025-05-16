@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Union
 
-from ..common import XmlAutoDeserialize, XChild, XAttr, parse_bool, parse_user_variables
+from UniLoader.common_api.xml_parsing import XmlAutoDeserialize, XChild, XAttr
 from ..hpl2.map import Light, Area
 from ..hpl_common.map import EntityCommon, ObjectCommon
 

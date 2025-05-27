@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 
 import bpy
 
+from UniLoader.common_api.material_utils import create_node_group
 from .common_utils import find_file_v2
 from .game import Game
 from .resource_types.hpl2.mat import Mat
@@ -56,13 +57,6 @@ def _add_normal(material: bpy.types.Material, image: bpy.types.Image):
     connect_nodes(material, combine_rgb.outputs[0], normal_convert_node.inputs["Color"])
     return normal_convert_node.outputs[0]
     # connect_nodes(material, normal_convert_node.outputs[0], normal_input)
-
-
-def create_node_group(material, group_name: str):
-    node_tree = material.node_tree
-    group_node = node_tree.nodes.new('ShaderNodeGroup')
-    group_node.node_tree = bpy.data.node_groups[group_name]
-    return group_node
 
 
 def create_rgb_mix_group(material):
